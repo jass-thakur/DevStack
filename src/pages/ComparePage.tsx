@@ -92,6 +92,7 @@ export default function ComparePage() {
   const { compareTools, clearAll } = useCompare();
   const navigate = useNavigate();
 
+  if (compareTools.length === 0) {
     return (
       <div className="min-h-screen bg-background pt-24 flex flex-col items-center justify-center px-4 animate-in fade-in duration-700 slide-in-from-bottom-4">
         <div className="text-6xl mb-6">⚖️</div>

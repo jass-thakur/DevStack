@@ -1,5 +1,5 @@
 const fs = require('fs');
-const apiKey = "AIzaSyCmY3nVHSZyXn1O_H-rStmGHW0_I3kaAzw";
+const apiKey = import.meta.env.VITE_API_KEY;
 const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
 
 async function listModels() {

@@ -7,9 +7,10 @@ import { ApiKeyProvider } from "@/context/ApiKeyContext";
 import { Navbar } from "@/components/Navbar";
 import { CompareTray } from "@/components/CompareTray";
 import HeroPage from "@/pages/HeroPage";
-import DiscoverPage from "@/pages/DiscoverPage";
 import ComparePage from "@/pages/ComparePage";
 import RankingsPage from "@/pages/RankingsPage";
+import SkillsRoadmapLanding from "@/pages/SkillsRoadmapLanding";
+import SkillsRoadmapDetail from "@/pages/SkillsRoadmapDetail";
 import StackBuilderPage from "@/pages/StackBuilderPage";
 import TermsPage from "@/pages/TermsPage";
 import NotFound from "@/pages/NotFound";
@@ -29,9 +30,10 @@ const App = () => (
             <OnboardingModal />
             <Routes>
               <Route path="/" element={<HeroPage />} />
-              <Route path="/discover" element={<DiscoverPage />} />
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/rankings" element={<RankingsPage />} />
+              <Route path="/roadmap" element={<SkillsRoadmapLanding />} />
+              <Route path="/roadmap/:domainId" element={<SkillsRoadmapDetail />} />
               <Route path="/stack-builder" element={<StackBuilderPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="*" element={<NotFound />} />

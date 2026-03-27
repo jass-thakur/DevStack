@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Search, Zap, BarChart3, Layers, Trophy, Menu, X, Settings } from "lucide-react";
+import { Search, Zap, BarChart3, Layers, Trophy, Menu, X, Settings, Map } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useApiKey } from "@/context/ApiKeyContext";
 import { cn } from "@/lib/utils";
@@ -7,9 +7,9 @@ import { SettingsModal } from "./SettingsModal";
 
 const navItems = [
   { path: "/", label: "Home", icon: Zap },
-  { path: "/discover", label: "Discover", icon: Search },
   { path: "/compare", label: "Compare", icon: Layers },
   { path: "/rankings", label: "Rankings", icon: Trophy },
+  { path: "/roadmap", label: "Roadmap", icon: Map },
   { path: "/stack-builder", label: "Stack Builder", icon: BarChart3 },
 ];
 
@@ -31,10 +31,10 @@ export function Navbar() {
 
   return (
     <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md border-b",
+      "fixed top-0 left-0 right-0 z-[100] transition-all duration-300 backdrop-blur-xl border-b",
       scrolled 
-        ? "bg-[rgba(15,17,23,0.85)] border-[rgba(255,255,255,0.06)] shadow-lg" 
-        : "bg-white/[0.03] border-white/[0.06]"
+        ? "bg-[#080B14] border-white/10 shadow-lg" 
+        : "bg-[#080B14]/95 border-transparent"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-bold text-lg">

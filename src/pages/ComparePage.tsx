@@ -99,7 +99,7 @@ export default function ComparePage() {
         <h2 className="text-2xl font-bold text-white mb-2">No tools to compare</h2>
         <p className="text-muted-foreground mb-8">Add tools from the Discover page to compare them.</p>
         <Button 
-          onClick={() => navigate("/discover")} 
+          onClick={() => navigate("/")} 
           className="gradient-button h-11 px-8 rounded-xl font-bold"
         >
           <ArrowLeft className="h-4 w-4 mr-2" /> Browse Tools

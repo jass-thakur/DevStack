@@ -1,17 +1,53 @@
-import { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { useTools } from "@/hooks/use-tools";
 import { Trophy, Medal, Search, TrendingUp, Zap, BarChart3, ArrowLeft, AlertCircle, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { Button } from "@/components/ui/button";
 
+const CATEGORY_OPTIONS_NAMES = [
+  "Frontend Frameworks", "Backend Frameworks", "Full Stack Development", "Database",
+  "DevOps & Cloud", "Hosting & Deployment", "Dev Tools", "Mobile Frameworks",
+  "AI / ML Tools", "Cybersecurity", "Data Science & Analysis", "Game Development",
+  "UI/UX Design", "Authentication", "CSS & Styling", "Analytics & Dashboards",
+  "Payment Tools", "Testing Tools", "Web3 & Blockchain", "CMS & E-commerce", "No-Code / Low-Code"
+];
+
 export default function RankingsPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const queryParam = searchParams.get("q") || "Frontend Frameworks";
-  const [query, setQuery] = useState(queryParam);
-  const { data: tools = [], isLoading, error, refetch } = useTools(queryParam);
+  const fromHome = searchParams.get("fromHome") === "true";
+  const categoryParam = searchParams.get("category");
+  
+  // Map category code to full title if needed, or use as is
+  const getFullCategory = (param: string | null) => {
+    if (!param) return "Frontend Frameworks";
+    const lower = param.toLowerCase();
+    if (lower === "backend") return "Backend Frameworks";
+    if (lower === "frontend") return "Frontend Frameworks";
+    if (lower === "mobile") return "Mobile Frameworks";
+    if (lower === "database") return "Database";
+    if (lower === "ai" || lower === "ai/ml") return "AI / ML Tools";
+    // Check if it's already a full name
+    const found = CATEGORY_OPTIONS_NAMES.find(n => n.toLowerCase() === lower);
+    if (found) return found;
+    return param.charAt(0).toUpperCase() + param.slice(1);
+  };
+
+  const initialQuery = categoryParam ? getFullCategory(categoryParam) : (searchParams.get("q") || "Frontend Frameworks");
+
+  const [query, setQuery] = useState(initialQuery);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const { data: tools = [], isLoading, error, refetch } = useTools(initialQuery);
+  
+  useEffect(() => {
+    if (fromHome) {
+      setIsHighlighted(true);
+      const timer = setTimeout(() => setIsHighlighted(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [fromHome]);
   
   const displayTools = tools || [];
 
@@ -29,17 +65,41 @@ export default function RankingsPage() {
   return (
     <div className="min-h-screen bg-background pt-24 pb-32 px-4 animate-in fade-in duration-700 slide-in-from-bottom-4">
       <div className="container mx-auto max-w-4xl">
+        {fromHome && (
+          <nav className="flex items-center gap-4 text-xs font-medium text-muted-foreground mb-8 animate-in fade-in slide-in-from-left-4 duration-500">
+            <Link to={`/?q=${encodeURIComponent(query)}`} className="p-2 rounded-full hover:bg-white/5 transition-all text-white/50 hover:text-white border border-white/10 group">
+              <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+            </Link>
+            <div className="flex items-center gap-2">
+              <Link to="/" className="hover:text-primary transition-colors flex items-center gap-1">
+                <span className="text-sm">🏠</span> Home
+              </Link>
+              <span className="opacity-30">/</span>
+              <Link to={`/?q=${encodeURIComponent(query)}`} className="hover:text-primary transition-colors">
+                {query}
+              </Link>
+              <span className="opacity-30">/</span>
+              <span className="text-white">Rankings</span>
+            </div>
+          </nav>
+        )}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
           <div className="flex-1">
             <h1 className="text-4xl font-bold text-white mb-2">
               Performance <span className="gradient-text">Rankings</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Top vetted picks for <span className="text-primary font-bold">"{queryParam}"</span></p>
+            <p className="text-sm text-muted-foreground">Top vetted picks for <span className="text-primary font-bold">"{query}"</span></p>
           </div>
           
           <div className="w-full md:w-80 relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl blur opacity-10 group-focus-within:opacity-30 transition duration-500" />
-            <div className="relative flex items-center bg-[#1A1D25] border border-white/10 rounded-xl overflow-hidden p-1 transition-all group-focus-within:border-primary/40">
+            <div className={cn(
+              "absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl blur transition duration-500",
+              isHighlighted ? "opacity-100 scale-105" : "opacity-10 group-focus-within:opacity-30"
+            )} />
+            <div className={cn(
+              "relative flex items-center bg-[#1A1D25] border border-white/10 rounded-xl overflow-hidden p-1 transition-all group-focus-within:border-primary/40",
+              isHighlighted && "border-primary/60 shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+            )}>
               <Search className="h-4 w-4 text-muted-foreground ml-3" />
               <input
                 type="text"

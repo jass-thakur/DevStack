@@ -3,6 +3,7 @@ import { useCompare } from "@/context/CompareContext";
 import { Star, Plus, Check, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { getRoadmapSlug } from "@/lib/navigation";
 
 interface ToolCardProps {
   tool: Tool;
@@ -71,25 +72,43 @@ export function ToolCard({ tool, onViewDetails }: ToolCardProps) {
         ))}
       </div>
 
-      <div className="flex items-center gap-2 mt-auto pt-4 relative z-10">
-        <button
-          onClick={() => inCompare ? removeTool(tool.id) : addTool(tool)}
-          className={cn(
-            "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition-all border",
-            inCompare
-              ? "bg-primary/20 text-primary border-primary/30"
-              : "bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-white"
-          )}
-        >
-          {inCompare ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-          {inCompare ? "Added" : "Compare"}
-        </button>
-        <button
-          onClick={() => onViewDetails?.(tool)}
-          className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold bg-primary text-white hover:opacity-90 transition-all shadow-lg shadow-primary/20"
-        >
-          View Details
-        </button>
+      <div className="flex flex-col gap-2 mt-auto pt-4 relative z-10">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => inCompare ? removeTool(tool.id) : addTool(tool)}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition-all border",
+              inCompare
+                ? "bg-primary/20 text-primary border-primary/30"
+                : "bg-white/5 text-muted-foreground border-white/10 hover:bg-white/10 hover:text-white"
+            )}
+          >
+            {inCompare ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+            {inCompare ? "Added" : "Compare"}
+          </button>
+          <button
+            onClick={() => onViewDetails?.(tool)}
+            className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold bg-primary text-white hover:opacity-90 transition-all shadow-lg shadow-primary/20"
+          >
+            View Details
+          </button>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 pt-1 border-t border-white/5">
+          <Link
+            to={`/roadmap/${getRoadmapSlug(tool.category) || ''}?fromHome=true&q=${encodeURIComponent(tool.category)}`}
+            className="flex-1 text-center py-1.5 text-[10px] font-medium text-muted-foreground hover:text-purple-400 hover:underline transition-colors"
+          >
+            🗺️ Roadmap
+          </Link>
+          <div className="w-[1px] h-3 bg-white/10" />
+          <Link
+            to={`/rankings?category=${encodeURIComponent(tool.category)}&fromHome=true`}
+            className="flex-1 text-center py-1.5 text-[10px] font-medium text-muted-foreground hover:text-amber-400 hover:underline transition-colors"
+          >
+            🏆 Rankings
+          </Link>
+        </div>
       </div>
 
       {/* Subtle hover glow */}

@@ -141,7 +141,6 @@ export function useTools(query: string) {
   return useQuery<Tool[]>({
     queryKey: ["tools", query, selectedModel],
     queryFn: async () => {
-      if (!apiKey) throw new Error("Gemini API Key is missing");
       if (!query) return [];
 
       try {
@@ -151,6 +150,7 @@ export function useTools(query: string) {
 3. Use the Tool structure but keep values ultra-short.
 Return ONLY JSON.`;
 
+        if (!apiKey) throw new Error("No API Key");
         const result = await fetchFromGemini(prompt, apiKey, selectedModel);
         
         // Inject isCached status
@@ -179,11 +179,11 @@ Return ONLY JSON.`;
         if (normalizedQuery.length > 0) {
            return DEMO_DATA["Frontend Frameworks"].map(tool => ({ ...tool, isSample: true }));
         }
-
+ 
         throw error;
       }
     },
-    enabled: !!apiKey && !!query,
+    enabled: !!query,
     staleTime: 1000 * 60 * 60,
     gcTime: 1000 * 60 * 60 * 2,
     refetchOnWindowFocus: false,
@@ -205,7 +205,6 @@ export function useStackRecommender(query: string) {
   return useQuery<StackRecommendation | null>({
     queryKey: ["stack", query, selectedModel],
     queryFn: async () => {
-      if (!apiKey) throw new Error("Gemini API Key is missing");
       if (!query) return null;
 
       try {
@@ -229,6 +228,7 @@ Return a JSON object with this exact structure:
 }
 Return ONLY JSON. No other text.`;
 
+        if (!apiKey) throw new Error("No API Key");
         const result = await fetchFromGemini(prompt, apiKey, selectedModel);
         return result.data;
       } catch (error) {
@@ -236,7 +236,7 @@ Return ONLY JSON. No other text.`;
         return getRecommendedStack(query);
       }
     },
-    enabled: !!apiKey && !!query,
+    enabled: !!query,
     staleTime: 1000 * 60 * 60,
     gcTime: 1000 * 60 * 60 * 2,
     refetchOnWindowFocus: false,

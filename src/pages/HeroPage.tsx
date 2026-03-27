@@ -75,7 +75,7 @@ const AnimatedCounter = ({ end, duration = 1500, suffix = "" }: { end: number, d
 
 export default function HeroPage() {
   const navigate = useNavigate();
-  const { isConfigured } = useApiKey();
+  const { } = useApiKey();
   const [searchParams] = useSearchParams();
   const qParam = searchParams.get("q");
   
@@ -224,12 +224,6 @@ export default function HeroPage() {
             </div>
           )}
 
-          {!isConfigured && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-amber-400 text-sm animate-pulse">
-              <AlertCircle className="h-4 w-4" />
-              <span>Please add your API key in Settings to fetch results.</span>
-            </div>
-          )}
         </div>
 
         {/* Quick Filter Pills */}

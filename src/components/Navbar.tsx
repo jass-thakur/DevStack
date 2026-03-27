@@ -17,7 +17,7 @@ export function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const { removeApiKey, isConfigured, isGlobal } = useApiKey();
+  const { isGlobal } = useApiKey();
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -62,15 +62,14 @@ export function Navbar() {
               )}
             </Link>
           ))}
-          {isConfigured && (
-            <button
-              onClick={() => setSettingsOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors ml-2 border border-white/5"
-              title="Settings & Model Selection"
-            >
-              <Settings className="h-4 w-4" />
-            </button>
-          )}
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors ml-2 border border-white/5"
+            title="Settings & Model Selection"
+          >
+            <Settings className="h-4 w-4" />
+          </button>
+
         </div>
 
         <SettingsModal 

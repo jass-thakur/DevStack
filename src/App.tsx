@@ -27,7 +27,7 @@ const App = () => (
         <ApiKeyProvider>
           <CompareProvider>
             <Navbar />
-            <OnboardingModal />
+
             <Routes>
               <Route path="/" element={<HeroPage />} />
               <Route path="/compare" element={<ComparePage />} />
